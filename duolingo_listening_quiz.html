@@ -41,7 +41,7 @@
   let correctCount = 0;
   let wrongCount = 0;
 
-  fetch('b2_listening_phrases.json')
+  fetch('phrases.json')
     .then(response => response.json())
     .then(data => {
       phrases = data;
