@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listening Quiz - B2</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f7f7f7; }
+    .container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; margin-right: 10px; }
+    .play-btn { background-color: #4CAF50; color: white; }
+    .check-btn { background-color: #2196F3; color: white; }
+    .next-btn { background-color: #FF9800; color: white; }
+    .result-box { background: #eef3f7; padding: 15px; margin-top: 10px; border-radius: 6px; min-height: 50px; }
+    .progress-bar { height: 10px; background-color: #ddd; border-radius: 5px; overflow: hidden; margin-top: 20px; }
+    .progress { height: 100%; background-color: #f4b400; width: 0%; transition: width 0.3s; }
+    textarea { width: 100%; height: 60px; margin-top: 10px; font-size: 16px; }
+    .highlight-correct { color: blue; font-weight: bold; }
+    .highlight-wrong { color: red; text-decoration: line-through; font-weight: bold; }
+    .score-report { margin-top: 10px; font-size: 16px; }
+    .correct-count { color: green; font-weight: bold; }
+    .wrong-count { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Grade B2 - Listening Practice</h2>
+  <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
+  <button class="btn check-btn" onclick="checkAnswer()">✔ CHECK</button>
+  <button class="btn next-btn" onclick="nextPhrase()">➡ NEXT</button>
+  <textarea id="userInput" placeholder="Type what you heard..."></textarea>
+  <div class="result-box" id="resultBox"></div>
+  <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+  <div class="score-report">✅ Correct: <span id="correctCount" class="correct-count">0</span> | ❌ Incorrect: <span id="wrongCount" class="wrong-count">0</span></div>
+</div>
+
+<script>
+  let phrases = [];
+  let phraseIndex = 0;
+  let currentStep = 0;
+  let score = 0;
+  let correctCount = 0;
+  let wrongCount = 0;
+
+  fetch('phrases.json')
+    .then(response => response.json())
+    .then(data => {
+      phrases = data;
+      setPhrases();
+    });
+
+  let audio, audioSlow;
+
+  function setPhrases() {
+    audio = new SpeechSynthesisUtterance(phrases[phraseIndex]);
+    audioSlow = new SpeechSynthesisUtterance(phrases[phraseIndex]);
+    audio.lang = 'en-US';
+    audioSlow.lang = 'en-US';
+    audioSlow.rate = 0.7;
+  }
+
+  function playAudio() {
+    if (!phrases.length) return;
+    if (currentStep === 0) {
+      speechSynthesis.speak(audio);
+      currentStep = 1;
+    } else {
+      speechSynthesis.speak(audioSlow);
+      currentStep = 0;
+    }
+  }
+
+  function checkAnswer() {
+    if (!phrases.length) return;
+    const user = document.getElementById('userInput').value.trim();
+    const resultBox = document.getElementById('resultBox');
+    const correctWords = phrases[phraseIndex].split(' ');
+    const userWords = user.split(' ');
+    let resultHTML = '';
+    let correct = true;
+
+    for (let i = 0; i < correctWords.length; i++) {
+      if (userWords[i] === correctWords[i]) {
+        resultHTML += `<span class="highlight-correct">${correctWords[i]}</span> `;
+      } else {
+        correct = false;
+        if (userWords[i]) {
+          resultHTML += `<span class="highlight-wrong">${userWords[i]}</span> `;
+        }
+        resultHTML += `<span class="highlight-correct">${correctWords[i]}</span> `;
+      }
+    }
+
+    resultBox.innerHTML = resultHTML.trim();
+
+    if (correct) {
+      correctCount++;
+      score += 1;
+    } else {
+      wrongCount++;
+    }
+    updateProgress();
+    updateScore();
+  }
+
+  function nextPhrase() {
+    if (!phrases.length) return;
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    setPhrases();
+    document.getElementById('userInput').value = '';
+    document.getElementById('resultBox').innerHTML = '';
+    currentStep = 0;
+  }
+
+  function updateProgress() {
+    const progress = document.getElementById('progressBar');
+    let progressPercent = Math.min(100, (correctCount / phrases.length) * 100);
+    progress.style.width = progressPercent + '%';
+  }
+
+  function updateScore() {
+    document.getElementById('correctCount').textContent = correctCount;
+    document.getElementById('wrongCount').textContent = wrongCount;
+  }
+</script>
+</body>
+</html>
