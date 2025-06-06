@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Listening Quiz - B2</title>
+  <title>Listening Quiz</title>
+  <link rel="icon" type="image/png" href="favicon.png">
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background-color: #f7f7f7; }
     .container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
@@ -10,6 +11,7 @@
     .play-btn { background-color: #4CAF50; color: white; }
     .check-btn { background-color: #2196F3; color: white; }
     .next-btn { background-color: #FF9800; color: white; }
+    .restart-btn { background-color: #9C27B0; color: white; }
     .result-box { background: #eef3f7; padding: 15px; margin-top: 10px; border-radius: 6px; min-height: 50px; }
     .progress-bar { height: 10px; background-color: #ddd; border-radius: 5px; overflow: hidden; margin-top: 20px; }
     .progress { height: 100%; background-color: #f4b400; width: 0%; transition: width 0.3s; }
@@ -19,27 +21,29 @@
     .score-report { margin-top: 10px; font-size: 16px; }
     .correct-count { color: green; font-weight: bold; }
     .wrong-count { color: red; font-weight: bold; }
+    select { margin-bottom: 10px; padding: 5px; }
   </style>
-  <link rel="icon" type="image/png" href="favicon.png">
-
 </head>
 <body>
 <div class="container">
-  <h2>Grade B2 - Listening Practice</h2>
+  <h2>Listening Practice</h2>
+  <label for="levelSelect">Choose level:</label>
+  <select id="levelSelect" onchange="loadLevel(this.value)">
+    <option value="phrases_a2.json">A2</option>
+    <option value="phrases_b1.json">B1</option>
+    <option value="phrases.json" selected>B2</option>
+  </select><br>
+
   <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
   <button class="btn check-btn" onclick="checkAnswer()">✔ CHECK</button>
   <button class="btn next-btn" onclick="nextPhrase()">➡ NEXT</button>
+  <button class="btn restart-btn" onclick="startOver()">🔄 START OVER</button>
+
   <textarea id="userInput" placeholder="Type what you heard..."></textarea>
   <div class="result-box" id="resultBox"></div>
   <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
   <div class="score-report">✅ Correct: <span id="correctCount" class="correct-count">0</span> | ❌ Incorrect: <span id="wrongCount" class="wrong-count">0</span></div>
 </div>
-<select id="levelSelect" onchange="loadLevel(this.value)">
-  <option value="phrases_a2.json">A2</option>
-  <option value="phrases_b1.json">B1</option>
-  <option value="phrases.json">B2</option>
-</select>
-
 
 <script>
   let phrases = [];
@@ -48,17 +52,19 @@
   let score = 0;
   let correctCount = 0;
   let wrongCount = 0;
-
-  fetch('phrases.json')
-    .then(response => response.json())
-    .then(data => {
-      phrases = data;
-      setPhrases();
-    });
-
   let audio, audioSlow;
 
+  function loadLevel(jsonFile) {
+    fetch(jsonFile)
+      .then(response => response.json())
+      .then(data => {
+        phrases = data;
+        startOver();
+      });
+  }
+
   function setPhrases() {
+    if (!phrases.length) return;
     audio = new SpeechSynthesisUtterance(phrases[phraseIndex]);
     audioSlow = new SpeechSynthesisUtterance(phrases[phraseIndex]);
     audio.lang = 'en-US';
@@ -68,6 +74,7 @@
 
   function playAudio() {
     if (!phrases.length) return;
+    speechSynthesis.cancel();
     if (currentStep === 0) {
       speechSynthesis.speak(audio);
       currentStep = 1;
@@ -102,7 +109,6 @@
 
     if (correct) {
       correctCount++;
-      score += 1;
     } else {
       wrongCount++;
     }
@@ -129,6 +135,24 @@
     document.getElementById('correctCount').textContent = correctCount;
     document.getElementById('wrongCount').textContent = wrongCount;
   }
+
+  function startOver() {
+    phraseIndex = 0;
+    currentStep = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    score = 0;
+    document.getElementById('userInput').value = '';
+    document.getElementById('resultBox').innerHTML = '';
+    updateProgress();
+    updateScore();
+    setPhrases();
+  }
+
+  // Auto-load default level on start
+  window.onload = function() {
+    loadLevel("phrases.json");
+  };
 </script>
 </body>
 </html>
