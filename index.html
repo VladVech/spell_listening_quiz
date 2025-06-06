@@ -20,6 +20,8 @@
     .correct-count { color: green; font-weight: bold; }
     .wrong-count { color: red; font-weight: bold; }
   </style>
+  <link rel="icon" type="image/png" href="favicon.png">
+
 </head>
 <body>
 <div class="container">
@@ -32,6 +34,12 @@
   <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
   <div class="score-report">✅ Correct: <span id="correctCount" class="correct-count">0</span> | ❌ Incorrect: <span id="wrongCount" class="wrong-count">0</span></div>
 </div>
+<select id="levelSelect" onchange="loadLevel(this.value)">
+  <option value="phrases_a2.json">A2</option>
+  <option value="phrases_b1.json">B1</option>
+  <option value="phrases.json">B2</option>
+</select>
+
 
 <script>
   let phrases = [];
