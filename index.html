@@ -7,11 +7,12 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background-color: #f7f7f7; }
     .container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; margin-right: 10px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; margin: 5px 5px 5px 0; }
     .play-btn { background-color: #4CAF50; color: white; }
     .check-btn { background-color: #2196F3; color: white; }
     .next-btn { background-color: #FF9800; color: white; }
     .restart-btn { background-color: #9C27B0; color: white; }
+    .level-btn { background-color: #607D8B; color: white; }
     .result-box { background: #eef3f7; padding: 15px; margin-top: 10px; border-radius: 6px; min-height: 50px; }
     .progress-bar { height: 10px; background-color: #ddd; border-radius: 5px; overflow: hidden; margin-top: 20px; }
     .progress { height: 100%; background-color: #f4b400; width: 0%; transition: width 0.3s; }
@@ -21,18 +22,17 @@
     .score-report { margin-top: 10px; font-size: 16px; }
     .correct-count { color: green; font-weight: bold; }
     .wrong-count { color: red; font-weight: bold; }
-    select { margin-bottom: 10px; padding: 5px; }
   </style>
 </head>
 <body>
 <div class="container">
   <h2>Listening Practice</h2>
-  <label for="levelSelect">Choose level:</label>
-  <select id="levelSelect" onchange="loadLevel(this.value)">
-    <option value="phrases_a2.json">A2</option>
-    <option value="phrases_b1.json">B1</option>
-    <option value="phrases.json" selected>B2</option>
-  </select><br>
+  <div>
+    <strong>Choose Level:</strong>
+    <button class="btn level-btn" onclick="loadLevel('phrases_a2.json')">A2</button>
+    <button class="btn level-btn" onclick="loadLevel('phrases_b1.json')">B1</button>
+    <button class="btn level-btn" onclick="loadLevel('phrases.json')">B2</button>
+  </div>
 
   <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
   <button class="btn check-btn" onclick="checkAnswer()">✔ CHECK</button>
@@ -53,8 +53,10 @@
   let correctCount = 0;
   let wrongCount = 0;
   let audio, audioSlow;
+  let currentLevel = "";
 
   function loadLevel(jsonFile) {
+    currentLevel = jsonFile;
     fetch(jsonFile)
       .then(response => response.json())
       .then(data => {
@@ -74,6 +76,7 @@
 
   function playAudio() {
     if (!phrases.length) return;
+    setPhrases(); // force update each time to reflect current index and level
     speechSynthesis.cancel();
     if (currentStep === 0) {
       speechSynthesis.speak(audio);
@@ -119,7 +122,6 @@
   function nextPhrase() {
     if (!phrases.length) return;
     phraseIndex = (phraseIndex + 1) % phrases.length;
-    setPhrases();
     document.getElementById('userInput').value = '';
     document.getElementById('resultBox').innerHTML = '';
     currentStep = 0;
@@ -149,7 +151,6 @@
     setPhrases();
   }
 
-  // Auto-load default level on start
   window.onload = function() {
     loadLevel("phrases.json");
   };
