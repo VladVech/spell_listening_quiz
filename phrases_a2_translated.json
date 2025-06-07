@@ -1,42 +1,202 @@
 [
   {
-    "en": "I go to school.",
-    "ru": "Я хожу в школу."
+    "en": "Can you help me?",
+    "ru": "Можешь мне помочь?"
   },
   {
-    "en": "She likes apples.",
-    "ru": "Ей нравятся яблоки."
+    "en": "Where is the interview?",
+    "ru": "Где проходит собеседование?"
   },
   {
-    "en": "He plays soccer.",
-    "ru": "Он играет в футбол."
+    "en": "What is your name?",
+    "ru": "Как тебя зовут?"
   },
   {
-    "en": "We live in Canada.",
-    "ru": "Мы живём в Канаде."
+    "en": "Please fill this form.",
+    "ru": "Пожалуйста, заполните эту форму."
   },
   {
-    "en": "They are happy.",
-    "ru": "Они счастливы."
+    "en": "I need more time.",
+    "ru": "Мне нужно больше времени."
   },
   {
-    "en": "It is cold today.",
-    "ru": "Сегодня холодно."
+    "en": "Do you speak English?",
+    "ru": "Ты говоришь по-английски?"
   },
   {
-    "en": "I have a book.",
-    "ru": "У меня есть книга."
+    "en": "I want to study.",
+    "ru": "Я хочу учиться."
   },
   {
-    "en": "You can come too.",
-    "ru": "Ты тоже можешь прийти."
+    "en": "She studies in Canada.",
+    "ru": "Она учится в Канаде."
   },
   {
-    "en": "The dog runs fast.",
-    "ru": "Собака быстро бегает."
+    "en": "He works part time.",
+    "ru": "Он работает неполный день."
   },
   {
-    "en": "My name is Anna.",
-    "ru": "Меня зовут Анна."
+    "en": "This is my resume.",
+    "ru": "Это моё резюме."
+  },
+  {
+    "en": "Where is the class?",
+    "ru": "Где находится аудитория?"
+  },
+  {
+    "en": "When is the test?",
+    "ru": "Когда экзамен?"
+  },
+  {
+    "en": "Is it a hard exam?",
+    "ru": "Это сложный экзамен?"
+  },
+  {
+    "en": "Can I try again?",
+    "ru": "Могу я попробовать снова?"
+  },
+  {
+    "en": "Do you need help?",
+    "ru": "Тебе нужна помощь?"
+  },
+  {
+    "en": "What do you need?",
+    "ru": "Что тебе нужно?"
+  },
+  {
+    "en": "How can I apply?",
+    "ru": "Как мне подать заявку?"
+  },
+  {
+    "en": "Is this the office?",
+    "ru": "Это офис?"
+  },
+  {
+    "en": "Please sit down here.",
+    "ru": "Пожалуйста, садитесь сюда."
+  },
+  {
+    "en": "Are you a student?",
+    "ru": "Ты студент?"
+  },
+  {
+    "en": "I go to college.",
+    "ru": "Я учусь в колледже."
+  },
+  {
+    "en": "This is my ID.",
+    "ru": "Это моё удостоверение."
+  },
+  {
+    "en": "Can I ask something?",
+    "ru": "Можно что-то спросить?"
+  },
+  {
+    "en": "Do you like school?",
+    "ru": "Тебе нравится школа?"
+  },
+  {
+    "en": "What is your plan?",
+    "ru": "Каков твой план?"
+  },
+  {
+    "en": "He wants to learn.",
+    "ru": "Он хочет учиться."
+  },
+  {
+    "en": "She wants that job.",
+    "ru": "Она хочет эту работу."
+  },
+  {
+    "en": "I will study hard.",
+    "ru": "Я буду усердно учиться."
+  },
+  {
+    "en": "Please wait outside.",
+    "ru": "Пожалуйста, подождите снаружи."
+  },
+  {
+    "en": "Is it my turn?",
+    "ru": "Моя очередь?"
+  },
+  {
+    "en": "Let’s begin the interview.",
+    "ru": "Давайте начнём собеседование."
+  },
+  {
+    "en": "Have you applied yet?",
+    "ru": "Ты уже подал заявку?"
+  },
+  {
+    "en": "It is very important.",
+    "ru": "Это очень важно."
+  },
+  {
+    "en": "Where do you live?",
+    "ru": "Где ты живёшь?"
+  },
+  {
+    "en": "I study every day.",
+    "ru": "Я учусь каждый день."
+  },
+  {
+    "en": "The form is ready.",
+    "ru": "Форма готова."
+  },
+  {
+    "en": "Can I sit here?",
+    "ru": "Можно я здесь сяду?"
+  },
+  {
+    "en": "What’s your first name?",
+    "ru": "Как твоё имя?"
+  },
+  {
+    "en": "Please speak slowly.",
+    "ru": "Пожалуйста, говорите медленно."
+  },
+  {
+    "en": "Do you have questions?",
+    "ru": "У тебя есть вопросы?"
+  },
+  {
+    "en": "The teacher is kind.",
+    "ru": "Учитель добрый."
+  },
+  {
+    "en": "I need that paper.",
+    "ru": "Мне нужна та бумага."
+  },
+  {
+    "en": "He is my professor.",
+    "ru": "Он мой профессор."
+  },
+  {
+    "en": "This is my school.",
+    "ru": "Это моя школа."
+  },
+  {
+    "en": "The answer is yes.",
+    "ru": "Ответ — да."
+  },
+  {
+    "en": "Can you repeat that?",
+    "ru": "Можешь это повторить?"
+  },
+  {
+    "en": "This is the email.",
+    "ru": "Вот электронная почта."
+  },
+  {
+    "en": "Why do you ask?",
+    "ru": "Почему ты спрашиваешь?"
+  },
+  {
+    "en": "Where is your room?",
+    "ru": "Где твоя комната?"
+  },
+  {
+    "en": "She is from India.",
+    "ru": "Она из Индии."
   }
 ]
