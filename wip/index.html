@@ -29,7 +29,7 @@
   <h2>Listening Practice</h2>
   <div>
     <strong>Choose Level:</strong>
-    <button class="btn level-btn" onclick="loadLevel('phrases_a2_translated.json')">A2</button>
+    <button class="btn level-btn" onclick="loadLevel('phrases_a2.json')">A2</button>
     <button class="btn level-btn" onclick="loadLevel('phrases_b1.json')">B1</button>
     <button class="btn level-btn" onclick="loadLevel('phrases.json')">B2</button>
   </div>
@@ -65,24 +65,10 @@
       });
   }
 
-  function getCurrentEnglishPhrase() {
-    if (typeof phrases[phraseIndex] === 'string') {
-      return phrases[phraseIndex];
-    }
-    return phrases[phraseIndex].en;
-  }
-
-  function getCurrentTranslation() {
-    if (typeof phrases[phraseIndex] === 'string') {
-      return '';
-    }
-    return phrases[phraseIndex].ru || '';
-  }
-
   function setPhrases() {
-    const phrase = getCurrentEnglishPhrase();
-    audio = new SpeechSynthesisUtterance(phrase);
-    audioSlow = new SpeechSynthesisUtterance(phrase);
+    if (!phrases.length) return;
+    audio = new SpeechSynthesisUtterance(phrases[phraseIndex]);
+    audioSlow = new SpeechSynthesisUtterance(phrases[phraseIndex]);
     audio.lang = 'en-US';
     audioSlow.lang = 'en-US';
     audioSlow.rate = 0.7;
@@ -90,7 +76,7 @@
 
   function playAudio() {
     if (!phrases.length) return;
-    setPhrases();
+    setPhrases(); // force update each time to reflect current index and level
     speechSynthesis.cancel();
     if (currentStep === 0) {
       speechSynthesis.speak(audio);
@@ -103,10 +89,9 @@
 
   function checkAnswer() {
     if (!phrases.length) return;
-    const phrase = getCurrentEnglishPhrase();
     const user = document.getElementById('userInput').value.trim();
     const resultBox = document.getElementById('resultBox');
-    const correctWords = phrase.split(' ');
+    const correctWords = phrases[phraseIndex].split(' ');
     const userWords = user.split(' ');
     let resultHTML = '';
     let correct = true;
@@ -123,8 +108,6 @@
       }
     }
 
-    const translation = getCurrentTranslation();
-    resultHTML += translation ? `<br><strong>Перевод:</strong> ${translation}` : '';
     resultBox.innerHTML = resultHTML.trim();
 
     if (correct) {
