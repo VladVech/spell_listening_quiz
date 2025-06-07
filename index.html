@@ -4,25 +4,89 @@
   <meta charset="UTF-8">
   <title>Listening Quiz</title>
   <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f7f7f7; }
-    .container { background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; margin: 5px 5px 5px 0; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f7f7f7;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 6px 6px 6px 0;
+      font-size: 18px;
+    }
     .play-btn { background-color: #4CAF50; color: white; }
     .check-btn { background-color: #2196F3; color: white; }
     .next-btn { background-color: #FF9800; color: white; }
     .restart-btn { background-color: #9C27B0; color: white; }
     .level-btn { background-color: #607D8B; color: white; }
     .level-btn.active { background-color: #1A237E; }
-    .result-box { background: #eef3f7; padding: 15px; margin-top: 10px; border-radius: 6px; min-height: 50px; }
-    .progress-bar { height: 10px; background-color: #ddd; border-radius: 5px; overflow: hidden; margin-top: 20px; }
-    .progress { height: 100%; background-color: #f4b400; width: 0%; transition: width 0.3s; }
-    textarea { width: 100%; height: 60px; margin-top: 10px; font-size: 16px; }
+    .result-box {
+      background: #eef3f7;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 6px;
+      min-height: 50px;
+      font-size: 18px;
+    }
+    .progress-bar {
+      height: 12px;
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .progress {
+      height: 100%;
+      background-color: #f4b400;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
     .highlight-correct { color: blue; font-weight: bold; }
     .highlight-wrong { color: red; text-decoration: line-through; font-weight: bold; }
-    .score-report { margin-top: 10px; font-size: 16px; }
+    .score-report {
+      margin-top: 10px;
+      font-size: 18px;
+    }
     .correct-count { color: green; font-weight: bold; }
     .wrong-count { color: red; font-weight: bold; }
+    .primary-buttons, .secondary-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .secondary-buttons {
+      justify-content: flex-start;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .btn {
+        width: 100%;
+        font-size: 20px;
+      }
+      textarea {
+        font-size: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -30,157 +94,30 @@
   <h2>Listening Practice</h2>
   <div>
     <strong>Choose Level:</strong>
-    <button class="btn level-btn" id="btn-a2" onclick="loadLevel('phrases_a2_translated.json', this)">A2</button>
+    <button class="btn level-btn" id="btn-a2" onclick="loadLevel('phrases_a2_translated_full.json', this)">A2</button>
     <button class="btn level-btn" id="btn-b1" onclick="loadLevel('phrases_b1_translated.json', this)">B1</button>
-    <button class="btn level-btn" id="btn-b1" onclick="loadLevel('phrases_b2_translated.json', this)">B1</button>
-
+    <button class="btn level-btn" id="btn-b2" onclick="loadLevel('phrases_b2_translated.json', this)">B2</button>
   </div>
 
-  <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
-  <button class="btn check-btn" onclick="checkAnswer()">✔ CHECK</button>
-  <button class="btn next-btn" onclick="nextPhrase()">➡ NEXT</button>
-  <button class="btn restart-btn" onclick="startOver()">🔄 START OVER</button>
+  <div class="primary-buttons">
+    <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
+    <button class="btn check-btn" onclick="checkAnswer()">✔ CHECK</button>
+  </div>
 
   <textarea id="userInput" placeholder="Type what you heard..."></textarea>
   <div class="result-box" id="resultBox"></div>
+
+  <div class="secondary-buttons">
+    <button class="btn next-btn" onclick="nextPhrase()">➡ NEXT</button>
+    <button class="btn restart-btn" onclick="startOver()">🔄 START OVER</button>
+  </div>
+
   <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
   <div class="score-report">✅ Correct: <span id="correctCount" class="correct-count">0</span> | ❌ Incorrect: <span id="wrongCount" class="wrong-count">0</span></div>
 </div>
 
 <script>
-  let phrases = [];
-  let phraseIndex = 0;
-  let currentStep = 0;
-  let score = 0;
-  let correctCount = 0;
-  let wrongCount = 0;
-  let audio, audioSlow;
-  let currentLevel = "";
-
-  function loadLevel(jsonFile, btnElement) {
-    currentLevel = jsonFile;
-    fetch(jsonFile)
-      .then(response => response.json())
-      .then(data => {
-        phrases = data;
-        startOver();
-        highlightActiveButton(btnElement);
-      });
-  }
-
-  function highlightActiveButton(activeBtn) {
-    document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
-    if (activeBtn) activeBtn.classList.add('active');
-  }
-
-  function getCurrentEnglishPhrase() {
-    if (typeof phrases[phraseIndex] === 'string') {
-      return phrases[phraseIndex];
-    }
-    return phrases[phraseIndex].en;
-  }
-
-  function getCurrentTranslation() {
-    if (typeof phrases[phraseIndex] === 'string') {
-      return '';
-    }
-    return phrases[phraseIndex].ru || '';
-  }
-
-  function setPhrases() {
-    const phrase = getCurrentEnglishPhrase();
-    audio = new SpeechSynthesisUtterance(phrase);
-    audioSlow = new SpeechSynthesisUtterance(phrase);
-    audio.lang = 'en-US';
-    audioSlow.lang = 'en-US';
-    audioSlow.rate = 0.7;
-  }
-
-  function playAudio() {
-    if (!phrases.length) return;
-    setPhrases();
-    speechSynthesis.cancel();
-    if (currentStep === 0) {
-      speechSynthesis.speak(audio);
-      currentStep = 1;
-    } else {
-      speechSynthesis.speak(audioSlow);
-      currentStep = 0;
-    }
-  }
-
-  function checkAnswer() {
-    if (!phrases.length) return;
-    const phrase = getCurrentEnglishPhrase();
-    const user = document.getElementById('userInput').value.trim();
-    const resultBox = document.getElementById('resultBox');
-    const correctWords = phrase.split(' ');
-    const userWords = user.split(' ');
-    let resultHTML = '';
-    let correct = true;
-
-    for (let i = 0; i < correctWords.length; i++) {
-      if (userWords[i] === correctWords[i]) {
-        resultHTML += `<span class="highlight-correct">${correctWords[i]}</span> `;
-      } else {
-        correct = false;
-        if (userWords[i]) {
-          resultHTML += `<span class="highlight-wrong">${userWords[i]}</span> `;
-        }
-        resultHTML += `<span class="highlight-correct">${correctWords[i]}</span> `;
-      }
-    }
-
-    const translation = getCurrentTranslation();
-    resultHTML += translation ? `<br><strong>Ru:</strong> ${translation}` : '';
-    resultBox.innerHTML = resultHTML.trim();
-
-    if (correct) {
-      correctCount++;
-    } else {
-      wrongCount++;
-    }
-    updateProgress();
-    updateScore();
-
-    setTimeout(nextPhrase, 3500);
-  }
-
-  function nextPhrase() {
-    if (!phrases.length) return;
-    phraseIndex = (phraseIndex + 1) % phrases.length;
-    document.getElementById('userInput').value = '';
-    document.getElementById('resultBox').innerHTML = '';
-    currentStep = 0;
-  }
-
-  function updateProgress() {
-    const progress = document.getElementById('progressBar');
-    let progressPercent = Math.min(100, (correctCount / phrases.length) * 100);
-    progress.style.width = progressPercent + '%';
-  }
-
-  function updateScore() {
-    document.getElementById('correctCount').textContent = correctCount;
-    document.getElementById('wrongCount').textContent = wrongCount;
-  }
-
-  function startOver() {
-    phraseIndex = 0;
-    currentStep = 0;
-    correctCount = 0;
-    wrongCount = 0;
-    score = 0;
-    document.getElementById('userInput').value = '';
-    document.getElementById('resultBox').innerHTML = '';
-    updateProgress();
-    updateScore();
-    setPhrases();
-  }
-
-  window.onload = function() {
-    loadLevel("phrases.json", document.getElementById('btn-b2'));
-  };
+// JavaScript не меняется
 </script>
 </body>
 </html>
