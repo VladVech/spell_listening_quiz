@@ -13,6 +13,7 @@
     .next-btn { background-color: #FF9800; color: white; }
     .restart-btn { background-color: #9C27B0; color: white; }
     .level-btn { background-color: #607D8B; color: white; }
+    .level-btn.active { background-color: #1A237E; }
     .result-box { background: #eef3f7; padding: 15px; margin-top: 10px; border-radius: 6px; min-height: 50px; }
     .progress-bar { height: 10px; background-color: #ddd; border-radius: 5px; overflow: hidden; margin-top: 20px; }
     .progress { height: 100%; background-color: #f4b400; width: 0%; transition: width 0.3s; }
@@ -29,9 +30,9 @@
   <h2>Listening Practice</h2>
   <div>
     <strong>Choose Level:</strong>
-    <button class="btn level-btn" onclick="loadLevel('phrases_a2_translated.json')">A2</button>
-    <button class="btn level-btn" onclick="loadLevel('phrases_b1.json')">B1</button>
-    <button class="btn level-btn" onclick="loadLevel('phrases.json')">B2</button>
+    <button class="btn level-btn" id="btn-a2" onclick="loadLevel('phrases_a2_translated.json', this)">A2</button>
+    <button class="btn level-btn" id="btn-b1" onclick="loadLevel('phrases_b1.json', this)">B1</button>
+    <button class="btn level-btn" id="btn-b2" onclick="loadLevel('phrases.json', this)">B2</button>
   </div>
 
   <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
@@ -55,14 +56,20 @@
   let audio, audioSlow;
   let currentLevel = "";
 
-  function loadLevel(jsonFile) {
+  function loadLevel(jsonFile, btnElement) {
     currentLevel = jsonFile;
     fetch(jsonFile)
       .then(response => response.json())
       .then(data => {
         phrases = data;
         startOver();
+        highlightActiveButton(btnElement);
       });
+  }
+
+  function highlightActiveButton(activeBtn) {
+    document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+    if (activeBtn) activeBtn.classList.add('active');
   }
 
   function getCurrentEnglishPhrase() {
@@ -134,6 +141,8 @@
     }
     updateProgress();
     updateScore();
+
+    setTimeout(nextPhrase, 1500);
   }
 
   function nextPhrase() {
@@ -169,7 +178,7 @@
   }
 
   window.onload = function() {
-    loadLevel("phrases.json");
+    loadLevel("phrases.json", document.getElementById('btn-b2'));
   };
 </script>
 </body>
