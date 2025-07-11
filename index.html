@@ -119,8 +119,9 @@
     }
 
     const translation = getCurrentTranslation();
-    resultHTML += translation ? `<br><strong>Перевод:</strong> ${translation}` : '';
-    resultBox.innerHTML = resultHTML.trim();
+resultHTML += `<br><strong>Перевод:</strong> ${translation}`;
+resultBox.innerHTML = resultHTML.trim();
+
 
     if (correct) correctCount++;
     else wrongCount++;
