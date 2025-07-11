@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Listening Quiz</title>
+  <title>Listening Quiz – C1</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background-color: #f7f7f7; }
@@ -13,8 +13,6 @@
     .check-btn { background-color: #2196F3; color: white; }
     .next-btn { background-color: #FF9800; color: white; }
     .restart-btn { background-color: #9C27B0; color: white; }
-    .level-btn { background-color: #607D8B; color: white; }
-    .level-btn.active { background-color: #1A237E; }
     .result-box { background: #eef3f7; padding: 15px; margin-top: 10px; border-radius: 6px; min-height: 50px; font-size: 18px; }
     .progress-bar { height: 12px; background-color: #ddd; border-radius: 5px; overflow: hidden; margin-top: 20px; }
     .progress { height: 100%; background-color: #f4b400; width: 0%; transition: width 0.3s; }
@@ -34,16 +32,7 @@
 </head>
 <body>
 <div class="container">
-  <h2>Listening Practice</h2>
-  <div>
-    <button class="btn level-btn" id="btn-a2" onclick="loadLevel('phrases_a2_translated.json', 'A2', this)">A2</button>
-    <button class="btn level-btn" id="btn-b1" onclick="loadLevel('phrases_b1_translated.json', 'B1', this)">B1</button>
-    <button class="btn level-btn" id="btn-b2" onclick="loadLevel('phrases_b2_translated.json', 'B2', this)">B2</button>
-  </div>
-  <div>
-  <a href="c1.html" class="btn level-btn" style="background-color:#3f51b5">▶ Go to C1 Level</a>
-</div>
-
+  <h2>Listening Practice – C1</h2>
   <div class="primary-buttons">
     <button class="btn play-btn" onclick="playAudio()">▶ PLAY</button>
     <button class="btn check-btn" onclick="checkAnswer()">✔ CHECK</button>
@@ -53,6 +42,7 @@
   <div class="secondary-buttons">
     <button class="btn next-btn" onclick="nextPhrase()">➡ NEXT</button>
     <button class="btn restart-btn" onclick="startOver()">🔄 START OVER</button>
+    <a href="index.html" class="btn" style="background-color:#607D8B; color:white;">⬅ Back to Levels</a>
   </div>
   <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
   <div class="score-report">✅ Correct: <span id="correctCount" class="correct-count">0</span> | ❌ Incorrect: <span id="wrongCount" class="wrong-count">0</span></div>
@@ -61,25 +51,16 @@
 <script>
   let phrases = [];
   let phraseIndex = 0;
-  let currentLevelFolder = "";
   let correctCount = 0;
   let wrongCount = 0;
+  const currentLevelFolder = "C1";
 
-  function loadLevel(jsonFile, folder, btnElement) {
-    currentLevelFolder = folder;
-    fetch(jsonFile)
-      .then(response => response.json())
-      .then(data => {
-        phrases = data;
-        startOver();
-        highlightActiveButton(btnElement);
-      });
-  }
-
-  function highlightActiveButton(activeBtn) {
-    document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
-    if (activeBtn) activeBtn.classList.add('active');
-  }
+  fetch("phrases_c1_translated.json")
+    .then(response => response.json())
+    .then(data => {
+      phrases = data;
+      startOver();
+    });
 
   function getCurrentEnglishPhrase() {
     return phrases[phraseIndex].en || "";
@@ -156,10 +137,6 @@
     updateProgress();
     updateScore();
   }
-
-  window.onload = function() {
-    loadLevel("phrases_b2_translated.json", "B2", document.getElementById('btn-b2'));
-  };
 </script>
 </body>
 </html>
